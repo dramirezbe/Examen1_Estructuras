@@ -24,7 +24,7 @@
 void configure_gpio_for_usart(void)
 {
     // Enable GPIOA clock
-    *RCC_AHB2ENR |= (1 << 0);
+    *RCC_AHB2ENR |= (1 << 0) | (1 << 2);
 
     // Configure PA2 (TX) as alternate function
     GPIOA->MODER &= ~(3U << (2 * 2)); // Clear mode bits for PA2
@@ -47,11 +47,38 @@ void configure_gpio_for_usart(void)
     // Configure PA2 and PA3 as no pull-up, no pull-down
     GPIOA->PUPDR &= ~(3U << (2 * 2)); // No pull-up, no pull-down for PA2
     GPIOA->PUPDR &= ~(3U << (3 * 2)); // No pull-up, no pull-down for PA3
+
 }
 
 
 void configure_gpio(void)
 {
+    // Enable clock for SYSCFG
+    *RCC_APB2ENR |= (1 << 0); // RCC_APB2ENR_SYSCFGEN
+
+    // Configure SYSCFG EXTICR to map EXTI13 to PC13
+    SYSCFG->EXTICR[3] &= ~(0xF << 4); // Clear bits for EXTI13
+    SYSCFG->EXTICR[3] |= (0x2 << 4);  // Map EXTI13 to Port C
+
+    // Configure EXTI13 for falling edge trigger
+    EXTI->FTSR1 |= (1 << BUTTON_PIN);  // Enable falling trigger
+    EXTI->RTSR1 &= ~(1 << BUTTON_PIN); // Disable rising trigger
+
+    // Unmask EXTI13
+    EXTI->IMR1 |= (1 << BUTTON_PIN);
+    
+
+    // Enable EXTI15_10 interrupt
+    *NVIC_ISER1 |= (1 << (EXTI15_10_IRQn - 32));
+
+
+    //pin_init 
+    GPIOA->MODER &= ~(0x3 << (LED_PIN * 2)); // Clear MODER bits for this pin 
+    GPIOA->MODER |= (0x1 << (LED_PIN * 2)); // Set MODER bits for this pin 0x1 Output
+
+    GPIOC->MODER &= ~(0x3 << (BUTTON_PIN * 2)); // Clear MODER bits for this pin
+    GPIOC->MODER |= (0x0 << (BUTTON_PIN * 2)); // Set MODER bits for this pin
+
 
     
 }

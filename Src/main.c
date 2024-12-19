@@ -50,10 +50,11 @@ void handle_event(uint8_t event) {
     }
 }
 
+
 int main(void) {
     configure_systick_and_start();
     configure_gpio();
-    usart2_init();
+    usart2_init(USART2);
 
     usart2_send_string("System Initialized\r\n");
 
@@ -73,7 +74,6 @@ int main(void) {
         uint8_t rx_byte = usart2_get_command();
         if (rx_byte != 0) {
             handle_event(rx_byte);
-            rx_byte = 0;
         }
 
         run_state_machine();

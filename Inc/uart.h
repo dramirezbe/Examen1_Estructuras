@@ -54,7 +54,7 @@ typedef enum {
     CMD_CLOSE
 } command_t;
 
-void usart2_init(void);
+void usart2_init(USART_TypeDef * UARTx);
 void usart2_send_string(const char *str);
 
 // Función para obtener el último comando recibido (no bloqueante)
