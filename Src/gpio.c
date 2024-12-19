@@ -76,9 +76,13 @@ void configure_gpio(void)
     GPIOA->MODER &= ~(0x3 << (LED_PIN * 2)); // Clear MODER bits for this pin 
     GPIOA->MODER |= (0x1 << (LED_PIN * 2)); // Set MODER bits for this pin 0x1 Output
 
+    GPIOA->MODER &= ~(0x3 << (5 * 2)); // Clear MODER bits for this pin 
+    GPIOA->MODER |= (0x1 << (5 * 2)); // Set MODER bits for this pin 0x1 Output
+
     GPIOC->MODER &= ~(0x3 << (BUTTON_PIN * 2)); // Clear MODER bits for this pin
     GPIOC->MODER |= (0x0 << (BUTTON_PIN * 2)); // Set MODER bits for this pin
 
+    configure_gpio_for_usart();
 
     
 }

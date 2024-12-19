@@ -8,9 +8,6 @@ static volatile command_t last_command = CMD_NONE;
 
 void usart2_init(USART_TypeDef * UARTx)
 {
-    configure_gpio_for_usart();
-
-
     // TODO: Configurar UART2
 
     //Clock Enable

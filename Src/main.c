@@ -67,13 +67,14 @@ int main(void) {
 
         uint8_t button_pressed = button_driver_get_event();
         if (button_pressed != 0) {
-            handle_event(button_pressed);
+            handle_event(button_pressed); 
             button_pressed = 0;
         }
 
-        uint8_t rx_byte = usart2_get_command();
+        uint8_t rx_byte = usart2_get_command(); //Receive serial port message
         if (rx_byte != 0) {
             handle_event(rx_byte);
+            rx_byte = 0; //flag reset
         }
 
         run_state_machine();
